@@ -1,0 +1,1267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MADHVAM 01 — The instrument of the interval</title>
+<meta name="description" content="MADHVAM 01. A mechanical instrument machined from a single billet of grade-5 titanium. 231 components. 72-hour reserve. 500 pieces.">
+<meta name="theme-color" content="#050505">
+<style>
+:root{
+  --bg:#050505;
+  --bg-2:#0a0a0c;
+  --bg-3:#0e0e11;
+  --ink:#f4f2ee;
+  --ink-2:#b9b5ae;
+  --mute:#7e7a74;
+  --line:rgba(244,242,238,.10);
+  --line-2:rgba(244,242,238,.055);
+  --accent:#d9a441;
+  --accent-2:#f0c877;
+  --accent-dim:rgba(217,164,65,.16);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Inter,system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --pad:clamp(20px,5vw,64px);
+  --gap:clamp(56px,11vh,148px);
+  --maxw:1200px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#0a0a0c}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+.eyebrow{
+  font:500 10.5px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--mute);display:block;
+}
+.eyebrow--a{color:var(--accent)}
+.display{
+  font-weight:600;letter-spacing:-.045em;line-height:.94;margin:0;
+  font-size:clamp(2.5rem,8.2vw,7rem);
+}
+.h2{
+  font-weight:600;letter-spacing:-.035em;line-height:1.02;margin:0;
+  font-size:clamp(1.9rem,4.6vw,3.6rem);
+}
+.h3{font-weight:600;letter-spacing:-.02em;font-size:clamp(1.15rem,2vw,1.5rem);margin:0}
+.lede{font-size:clamp(1.05rem,1.6vw,1.4rem);line-height:1.5;color:var(--ink-2);letter-spacing:-.012em}
+.body{color:var(--mute);font-size:clamp(.95rem,1.15vw,1.05rem);line-height:1.7}
+.rule{height:1px;background:var(--line-2);border:0;margin:0}
+
+/* ---------- nav ---------- */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;padding:14px var(--pad);
+  background:rgba(5,5,5,.62);backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--line-2);
+  transform:translateY(-102%);opacity:0;
+  transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .4s ease;
+}
+.nav.is-on{transform:none;opacity:1}
+.nav__mark{font-weight:600;letter-spacing:.16em;font-size:12.5px;text-transform:uppercase}
+.nav__links{display:flex;gap:26px;align-items:center}
+.nav__links a{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);transition:color .25s}
+.nav__links a:hover{color:var(--ink)}
+.nav__cta{
+  font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--ink);
+  transition:border-color .25s,background .25s;
+}
+.nav__cta:hover{border-color:var(--accent);background:var(--accent-dim)}
+@media(max-width:760px){.nav__links{display:none}}
+
+/* ---------- film ---------- */
+.film{position:relative;height:780vh}
+.film__stage{
+  position:sticky;top:0;height:100svh;height:100vh;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 42%,#0d0d10 0%,#070708 46%,#040404 100%);
+}
+#stage{display:block;width:100%;height:100%}
+.film__layer{position:absolute;inset:0;pointer-events:none}
+
+/* captions */
+.cap{
+  position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(72px,14vh,132px);
+  opacity:0;will-change:transform,opacity;
+}
+.cap--center{
+  top:50%;bottom:auto;transform:translateY(-50%);text-align:center;
+  left:50%;right:auto;width:min(92vw,900px);margin-left:min(-46vw,-450px);
+}
+.cap__t{font-weight:600;letter-spacing:-.04em;line-height:.98;font-size:clamp(2.1rem,6.4vw,5rem);margin:0 0 14px}
+.cap__s{color:var(--ink-2);font-size:clamp(.95rem,1.5vw,1.22rem);max-width:46ch;margin:0;letter-spacing:-.01em}
+.cap--center .cap__s{margin-inline:auto}
+.cap__meta{margin-top:18px}
+
+/* exploded-part labels */
+.plabel{
+  position:absolute;top:0;left:0;opacity:0;will-change:transform,opacity;
+  font:500 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-2);white-space:nowrap;transform:translate(-50%,-50%);
+}
+.plabel i{
+  display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--accent);margin-right:9px;vertical-align:middle;
+  box-shadow:0 0 0 4px rgba(217,164,65,.14);
+}
+
+/* progress rail */
+.rail{
+  position:absolute;right:calc(var(--pad) - 4px);top:50%;transform:translateY(-50%);
+  width:1px;height:min(42vh,320px);background:var(--line);
+}
+.rail__fill{position:absolute;inset:0 0 auto 0;background:var(--accent);height:0%}
+.rail__tick{position:absolute;left:-3px;width:7px;height:1px;background:var(--line)}
+.rail__num{
+  position:absolute;right:calc(var(--pad) - 4px);top:calc(50% + min(21vh,160px) + 18px);
+  font:500 10px/1 var(--mono);letter-spacing:.2em;color:var(--mute);
+}
+@media(max-width:640px){.rail,.rail__num{display:none}}
+
+.cue{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+  font:500 10px/1 var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--mute);
+  display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .4s;
+}
+.cue span{display:block;width:1px;height:34px;background:linear-gradient(var(--accent),transparent);animation:drop 2.1s ease-in-out infinite}
+@keyframes drop{0%{transform:scaleY(.2);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(.2);transform-origin:bottom}}
+
+/* ---------- reveals ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.rv.is-in{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.09s}.rv[data-d="2"]{transition-delay:.18s}
+.rv[data-d="3"]{transition-delay:.27s}.rv[data-d="4"]{transition-delay:.36s}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec{padding-block:var(--gap)}
+.sec--tight{padding-block:calc(var(--gap) * .62)}
+
+.manifesto{padding-block:calc(var(--gap) * 1.25);border-top:1px solid var(--line-2)}
+.manifesto p{
+  font-weight:600;letter-spacing:-.038em;line-height:1.1;margin:0;
+  font-size:clamp(1.65rem,4.4vw,3.5rem);max-width:20ch;
+}
+.manifesto p em{font-style:normal;color:var(--mute)}
+.manifesto__foot{margin-top:44px;display:flex;gap:clamp(24px,5vw,72px);flex-wrap:wrap;max-width:760px}
+.manifesto__foot p{font:400 clamp(.95rem,1.15vw,1.05rem)/1.7 var(--sans);letter-spacing:0;color:var(--mute);max-width:38ch;font-weight:400}
+
+.story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,84px);align-items:start}
+@media(max-width:860px){.story{grid-template-columns:1fr}}
+.tl{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-2)}
+.tl li{display:grid;grid-template-columns:78px 1fr;gap:clamp(14px,3vw,32px);padding:22px 0;border-bottom:1px solid var(--line-2)}
+.tl dt{font:500 11px/1.4 var(--mono);letter-spacing:.16em;color:var(--accent)}
+.tl h4{margin:0 0 6px;font-size:1.02rem;font-weight:600;letter-spacing:-.015em}
+.tl p{margin:0;color:var(--mute);font-size:.95rem;line-height:1.65}
+
+/* craft */
+.craft{display:grid;gap:clamp(20px,2.4vw,30px);grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.craft{grid-template-columns:1fr}}
+.card{
+  border:1px solid var(--line-2);border-radius:14px;overflow:hidden;background:var(--bg-2);
+  display:flex;flex-direction:column;
+}
+.card__art{position:relative;aspect-ratio:4/3;background:radial-gradient(85% 75% at 50% 45%,#111114 0%,#08080a 70%)}
+.card__art canvas{display:block;width:100%;height:100%}
+.card__body{padding:22px 22px 26px;border-top:1px solid var(--line-2)}
+.card__body h3{margin:10px 0 8px}
+.card__body p{margin:0;color:var(--mute);font-size:.93rem;line-height:1.65}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+@media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:clamp(26px,4vw,44px) 0;border-right:1px solid var(--line-2)}
+.stat:last-child{border-right:0}
+@media(max-width:820px){.stat:nth-child(2n){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line-2)}}
+.stat b{display:block;font-weight:600;letter-spacing:-.045em;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.stat b i{font-style:normal;color:var(--accent);font-size:.42em;letter-spacing:.02em;margin-left:.32em;vertical-align:.42em}
+.stat span{margin-top:12px}
+
+/* specs */
+.specs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(28px,5vw,84px);align-items:start}
+@media(max-width:860px){.specs{grid-template-columns:1fr}}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(24px,4vw,56px)}
+@media(max-width:560px){.spec-grid{grid-template-columns:1fr}}
+.spec-grid div{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line-2)}
+.spec-grid dt{font:500 10.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.spec-grid dd{margin:0;font-size:.95rem;text-align:right;letter-spacing:-.01em}
+
+/* quote */
+.quote{text-align:center;max-width:900px;margin:0 auto}
+.quote blockquote{
+  margin:0;font-weight:600;letter-spacing:-.035em;line-height:1.15;
+  font-size:clamp(1.5rem,3.6vw,2.7rem);
+}
+.quote figcaption{margin-top:26px}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(10px,1.4vw,18px)}
+.gal figure{margin:0;position:relative;border:1px solid var(--line-2);border-radius:12px;overflow:hidden;background:radial-gradient(80% 70% at 50% 45%,#101013 0%,#08080a 72%)}
+.gal canvas{display:block;width:100%;height:100%}
+.gal figcaption{position:absolute;left:14px;bottom:12px;font:500 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.gal .g-a{grid-column:span 4;aspect-ratio:16/10}
+.gal .g-b{grid-column:span 2;aspect-ratio:4/5}
+.gal .g-c{grid-column:span 2;aspect-ratio:1/1}
+.gal .g-d{grid-column:span 2;aspect-ratio:1/1}
+.gal .g-e{grid-column:span 2;aspect-ratio:1/1}
+@media(max-width:760px){
+  .gal{grid-template-columns:repeat(2,1fr)}
+  .gal .g-a{grid-column:span 2;aspect-ratio:16/11}
+  .gal .g-b,.gal .g-c,.gal .g-d,.gal .g-e{grid-column:span 1;aspect-ratio:1/1}
+}
+
+/* cta */
+.cta{text-align:center;padding-block:calc(var(--gap) * 1.15);border-top:1px solid var(--line-2)}
+.cta__price{margin:26px 0 0;font:500 12px/1.8 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.btn{
+  display:inline-flex;align-items:center;gap:12px;margin-top:34px;
+  padding:15px 30px;border-radius:999px;background:var(--accent);color:#0b0b0c;
+  font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px -12px rgba(217,164,65,.6)}
+.btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-left:10px}
+.btn--ghost:hover{border-color:var(--accent);box-shadow:none}
+
+/* footer */
+.foot{border-top:1px solid var(--line-2);padding-block:clamp(48px,7vh,88px) 34px;background:var(--bg-2)}
+.foot__grid{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:clamp(28px,4vw,56px)}
+@media(max-width:820px){.foot__grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.foot__grid{grid-template-columns:1fr}}
+.foot h5{margin:0 0 18px;font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.foot ul a{font-size:.92rem;color:var(--ink-2);transition:color .25s}
+.foot ul a:hover{color:var(--accent)}
+.foot__mark{font-weight:600;letter-spacing:-.04em;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1}
+.foot__note{margin:16px 0 0;color:var(--mute);font-size:.9rem;max-width:34ch;line-height:1.65}
+.foot__base{
+  margin-top:clamp(40px,6vh,72px);padding-top:24px;border-top:1px solid var(--line-2);
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+}
+
+/* overlays */
+.grain{
+  position:fixed;inset:-50%;z-index:80;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+.vig{position:fixed;inset:0;z-index:70;pointer-events:none;background:radial-gradient(130% 100% at 50% 45%,transparent 52%,rgba(0,0,0,.55) 100%)}
+
+@media(prefers-reduced-motion:reduce){
+  .rv{transition-duration:.01ms}
+  .cue span{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top">Madhvam</a>
+  <nav class="nav__links">
+    <a href="#craft">Craft</a>
+    <a href="#specs">Specification</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#reserve">Editions</a>
+  </nav>
+  <a class="nav__cta" href="#reserve">Reserve</a>
+</header>
+
+<main id="top">
+
+  <!-- ============ THE FILM ============ -->
+  <section class="film" id="film">
+    <div class="film__stage">
+      <canvas id="stage" aria-hidden="true"></canvas>
+
+      <div class="film__layer" id="labels"></div>
+
+      <div class="film__layer" id="captions">
+        <div class="cap cap--center" data-in="-0.07" data-out="0.105">
+          <span class="eyebrow eyebrow--a">Madhvam</span>
+          <h1 class="cap__t" style="margin-top:16px">MADHVAM 01</h1>
+          <p class="cap__s">A mechanical instrument for the only thing that cannot be manufactured.</p>
+        </div>
+
+        <div class="cap" data-in="0.135" data-out="0.262">
+          <span class="eyebrow">Chapter 01 — The billet</span>
+          <h2 class="cap__t" style="margin-top:14px">One piece.</h2>
+          <p class="cap__s">The case is cut from a single billet of grade-5 titanium. Fourteen hours of machining. Ninety-one percent of it becomes swarf.</p>
+        </div>
+
+        <div class="cap" data-in="0.305" data-out="0.442">
+          <span class="eyebrow">Chapter 02 — The architecture</span>
+          <h2 class="cap__t" style="margin-top:14px">Every part.</h2>
+          <p class="cap__s">Two hundred and thirty-one components, stacked along one axis. Nothing decorative. Nothing hidden that didn't earn its place.</p>
+        </div>
+
+        <div class="cap" data-in="0.482" data-out="0.594">
+          <span class="eyebrow">Chapter 03 — The calibre</span>
+          <h2 class="cap__t" style="margin-top:14px">The heart.</h2>
+          <p class="cap__s">Calibre M-01. Twenty-eight thousand eight hundred vibrations an hour — eight beats a second, held for three days.</p>
+        </div>
+
+        <div class="cap" data-in="0.628" data-out="0.735">
+          <span class="eyebrow">Chapter 04 — The assembly</span>
+          <h2 class="cap__t" style="margin-top:14px">Back together.</h2>
+          <p class="cap__s">Eleven stages, one pair of hands. A single watchmaker sees each movement from plate to regulation.</p>
+        </div>
+
+        <div class="cap" data-in="0.772" data-out="0.878">
+          <span class="eyebrow">Chapter 05 — After dark</span>
+          <h2 class="cap__t" style="margin-top:14px">It keeps going.</h2>
+          <p class="cap__s">Indices charged with Super-LumiNova X1 hold the night for eight hours. The watch does not need you awake to keep time.</p>
+        </div>
+
+        <div class="cap cap--center" data-in="0.906" data-out="1.06">
+          <span class="eyebrow eyebrow--a">500 pieces</span>
+          <h2 class="cap__t" style="margin-top:16px">MADHVAM 01</h2>
+          <p class="cap__s">Brushed. Sand. Midnight.</p>
+          <p class="cap__meta eyebrow">Keep scrolling</p>
+        </div>
+      </div>
+
+      <div class="rail"><span class="rail__fill" id="railFill"></span></div>
+      <div class="rail__num" id="railNum">00</div>
+      <div class="cue" id="cue">Scroll<span></span></div>
+    </div>
+  </section>
+
+  <div id="afterFilm" aria-hidden="true"></div>
+
+  <!-- ============ MANIFESTO ============ -->
+  <section class="manifesto">
+    <div class="wrap">
+      <span class="eyebrow rv">Manifesto</span>
+      <p class="rv" data-d="1" style="margin-top:34px">We did not set out to tell the time. <em>Clocks already do that.</em> We set out to make its passing feel like something you could hold.</p>
+      <div class="manifesto__foot">
+        <p class="rv" data-d="2">A quartz movement is more accurate than anything we will ever build. We know. Accuracy was never the difficult part — permanence was.</p>
+        <p class="rv" data-d="3">The 01 is designed to be serviced for a hundred years. Every component is documented, tooled and stocked. Nothing in it is glued.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="sec">
+    <div class="wrap story">
+      <div>
+        <span class="eyebrow rv">Origin</span>
+        <h2 class="h2 rv" data-d="1" style="margin-top:26px">Three engineers,<br>one lathe, one room.</h2>
+        <p class="body rv" data-d="2" style="margin-top:26px;max-width:44ch">Madhvam began in a converted print works with a second-hand Swiss lathe and a stubborn disagreement about tolerances. We spent the first two years making nothing we were willing to sell.</p>
+        <p class="body rv" data-d="3" style="margin-top:18px;max-width:44ch">The 01 is the first watch that survived our own review. It is not our best idea. It is the one we could not find a fault in.</p>
+      </div>
+      <ol class="tl rv" data-d="2">
+        <li><dt>2016</dt><div><h4>The disagreement</h4><p>A satellite timing team leaves aerospace to find out how accurate a mechanical escapement can honestly be.</p></div></li>
+        <li><dt>2018</dt><div><h4>Calibre zero</h4><p>Forty-one prototype movements. Thirty-nine fail regulation. Two are kept, and neither is ever worn outside the workshop.</p></div></li>
+        <li><dt>2021</dt><div><h4>The billet decision</h4><p>Two-part cases are abandoned. Every 01 case will be cut from one solid piece, at four times the cost.</p></div></li>
+        <li><dt>2024</dt><div><h4>M-01 certified</h4><p>Chronometer results at -1/+4 seconds a day across six positions, over a 72-hour reserve.</p></div></li>
+        <li><dt>Today</dt><div><h4>Five hundred</h4><p>Annual output is capped at the number of movements one workshop can finish by hand. It will not increase.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ CRAFT ============ -->
+  <section class="sec" id="craft">
+    <div class="wrap">
+      <span class="eyebrow rv">Craft</span>
+      <h2 class="h2 rv" data-d="1" style="margin-top:26px;max-width:16ch">Three things we refused to compromise.</h2>
+      <div class="craft" style="margin-top:clamp(38px,6vh,72px)">
+        <article class="card rv" data-d="1">
+          <div class="card__art"><canvas class="mini" data-pose="case"></canvas></div>
+          <div class="card__body">
+            <span class="eyebrow">01 — The billet</span>
+            <h3 class="h3">Cut, not cast</h3>
+            <p>Fourteen hours on a five-axis mill, then forty minutes of hand-brushing per case. Cast cases are cheaper and softer. We tried both.</p>
+          </div>
+        </article>
+        <article class="card rv" data-d="2">
+          <div class="card__art"><canvas class="mini" data-pose="movement"></canvas></div>
+          <div class="card__body">
+            <span class="eyebrow">02 — The calibre</span>
+            <h3 class="h3">M-01, in-house</h3>
+            <p>Free-sprung balance, 27 jewels, twin barrels. Designed so a watchmaker in 2090 can service it with tools that already exist.</p>
+          </div>
+        </article>
+        <article class="card rv" data-d="3">
+          <div class="card__art"><canvas class="mini" data-pose="dial"></canvas></div>
+          <div class="card__body">
+            <span class="eyebrow">03 — The dial</span>
+            <h3 class="h3">Legible at a glance</h3>
+            <p>Guilloché turned on a rose engine from 1912, then lacquered eight times. Indices are applied, never printed.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="sec--tight">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat rv"><b data-count="231">0</b><span class="eyebrow">Components</span></div>
+        <div class="stat rv" data-d="1"><b data-count="28800">0</b><span class="eyebrow">Vibrations / hour</span></div>
+        <div class="stat rv" data-d="2"><b data-count="72"><i>h</i></b><span class="eyebrow">Power reserve</span></div>
+        <div class="stat rv" data-d="3"><b data-count="500">0</b><span class="eyebrow">Pieces per year</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPECS ============ -->
+  <section class="sec" id="specs">
+    <div class="wrap specs">
+      <div>
+        <span class="eyebrow rv">Specification</span>
+        <h2 class="h2 rv" data-d="1" style="margin-top:26px">Every number<br>we could measure.</h2>
+        <p class="body rv" data-d="2" style="margin-top:24px;max-width:36ch">Published in full, including the ones that aren't flattering. The 01 is heavy for titanium and thick for a dress watch. Both were deliberate.</p>
+      </div>
+      <dl class="spec-grid rv" data-d="2">
+        <div><dt>Diameter</dt><dd>39.5 mm</dd></div>
+        <div><dt>Thickness</dt><dd>9.8 mm</dd></div>
+        <div><dt>Lug to lug</dt><dd>46.2 mm</dd></div>
+        <div><dt>Weight</dt><dd>71 g on bracelet</dd></div>
+        <div><dt>Case</dt><dd>Grade-5 titanium</dd></div>
+        <div><dt>Crystal</dt><dd>Sapphire, double AR</dd></div>
+        <div><dt>Case back</dt><dd>Exhibition sapphire</dd></div>
+        <div><dt>Water resistance</dt><dd>100 m</dd></div>
+        <div><dt>Movement</dt><dd>Calibre M-01</dd></div>
+        <div><dt>Frequency</dt><dd>4 Hz / 28,800 vph</dd></div>
+        <div><dt>Power reserve</dt><dd>72 hours</dd></div>
+        <div><dt>Jewels</dt><dd>27</dd></div>
+        <div><dt>Accuracy</dt><dd>−1 / +4 s per day</dd></div>
+        <div><dt>Luminous</dt><dd>Super-LumiNova X1</dd></div>
+        <div><dt>Strap</dt><dd>Titanium or rubber</dd></div>
+        <div><dt>Warranty</dt><dd>10 years, transferable</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE ============ -->
+  <section class="sec">
+    <div class="wrap">
+      <figure class="quote rv">
+        <blockquote>“It is the only watch I own that I notice when I take it off.”</blockquote>
+        <figcaption class="eyebrow">A. Vendel — industrial designer, owner no. 062</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="sec" id="gallery">
+    <div class="wrap">
+      <span class="eyebrow rv">Gallery</span>
+      <h2 class="h2 rv" data-d="1" style="margin-top:26px">From every angle.</h2>
+      <div class="gal rv" data-d="2" style="margin-top:clamp(34px,5vh,64px)">
+        <figure class="g-a"><canvas class="mini" data-pose="hero"></canvas><figcaption>Face — brushed</figcaption></figure>
+        <figure class="g-b"><canvas class="mini" data-pose="profile"></canvas><figcaption>Profile — 9.8 mm</figcaption></figure>
+        <figure class="g-c"><canvas class="mini" data-pose="back"></canvas><figcaption>Case back</figcaption></figure>
+        <figure class="g-d"><canvas class="mini" data-pose="exploded"></canvas><figcaption>Exploded</figcaption></figure>
+        <figure class="g-e"><canvas class="mini" data-pose="lume"></canvas><figcaption>Lume</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="reserve">
+    <div class="wrap">
+      <span class="eyebrow eyebrow--a rv">Editions</span>
+      <h2 class="display rv" data-d="1" style="margin-top:26px">MADHVAM 01</h2>
+      <p class="lede rv" data-d="2" style="margin:26px auto 0;max-width:40ch">Brushed, Sand and Midnight. Five hundred pieces a year, allocated in the order they are reserved.</p>
+      <p class="cta__price rv" data-d="3">£2,940 · Ships in 90 days · 10-year warranty</p>
+      <div class="rv" data-d="4">
+        <a class="btn" href="#reserve">Reserve yours</a>
+        <a class="btn btn--ghost" href="#specs">Full specification</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__mark">Madhvam</div>
+        <p class="foot__note">Mechanical instruments, made by Madhvam. Capped output, published tolerances, no glue.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul><li><a href="#specs">MADHVAM 01</a></li><li><a href="#craft">The calibre</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#reserve">Editions</a></li></ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul><li><a href="#top">Origin</a></li><li><a href="#craft">Workshop</a></li><li><a href="#top">Careers</a></li><li><a href="#top">Press</a></li></ul>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <ul><li><a href="#top">Servicing</a></li><li><a href="#top">Warranty</a></li><li><a href="#specs">Sizing</a></li><li><a href="#top">Contact</a></li></ul>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© <span id="yr">2026</span> Madhvam Instruments</span>
+      <span>Every image on this page is rendered in real time. No photographs were used.</span>
+      <span>Terms · Privacy</span>
+    </div>
+  </div>
+</footer>
+
+<div class="vig"></div>
+<div class="grain"></div>
+<script>
+/* ============================================================
+   MADHVAM 01 — real-time 3D scroll engine
+   No libraries. Canvas 2D + a small software 3D pipeline.
+   ============================================================ */
+
+/* --- GEOMETRY:START --- */
+var TAU = Math.PI * 2;
+var RAMP = 56;
+
+/* ---------- materials ---------- */
+function mkMat(o) {
+  var m = {
+    c: [160, 162, 166], amb: 0.11, kd: 0.74, ks: 0.50, sh: 30,
+    rimK: 0.26, alpha: 1, emit: 0, emitBase: 0.34, dbl: false
+  };
+  for (var k in o) m[k] = o[k];
+  m.ramp = new Array(RAMP);
+  for (var i = 0; i < RAMP; i++) {
+    var u = i / (RAMP - 1);
+    var r = m.c[0] * (0.08 + 1.02 * u);
+    var g = m.c[1] * (0.08 + 1.02 * u);
+    var b = m.c[2] * (0.08 + 1.02 * u);
+    var hot = m.emit ? 0 : Math.max(0, (u - 0.76) / 0.24);
+    var w = hot * hot * 0.88;
+    r += (255 - r) * w; g += (255 - g) * w; b += (255 - b) * w;
+    m.ramp[i] = 'rgb(' + Math.min(255, r | 0) + ',' + Math.min(255, g | 0) + ',' + Math.min(255, b | 0) + ')';
+  }
+  return m;
+}
+
+var MATS = [
+  mkMat({ c: [150, 152, 158], ks: 0.55, sh: 42, rimK: 0.26 }),           // 0 titanium
+  mkMat({ c: [ 96,  98, 104], ks: 0.46, sh: 34, rimK: 0.24 }),           // 1 titanium dark
+  mkMat({ c: [176, 178, 184], ks: 0.62, sh: 52, rimK: 0.30 }),           // 2 titanium bright (flutes)
+  mkMat({ c: [124, 152, 178], ks: 1.00, sh: 84, rimK: 0.60, alpha: 0.26, dbl: true }), // 3 sapphire
+  mkMat({ c: [23, 25, 30], amb: 0.16, kd: 0.60, ks: 0.36, sh: 22, rimK: 0.20 }),       // 4 dial
+  mkMat({ c: [30, 33, 40], amb: 0.16, kd: 0.58, ks: 0.34, sh: 30, rimK: 0.18 }),       // 5 dial guilloche
+  mkMat({ c: [217, 164, 65], ks: 0.80, sh: 44, rimK: 0.34 }),           // 6 gold
+  mkMat({ c: [238, 206, 132], emit: 1, emitBase: 0.26 }),               // 7 lume
+  mkMat({ c: [156, 128, 82], ks: 0.60, sh: 30, rimK: 0.26 }),           // 8 gilt plate
+  mkMat({ c: [120, 124, 133], ks: 0.66, sh: 56, rimK: 0.28 }),          // 9 steel
+  mkMat({ c: [48, 50, 57], ks: 0.42, sh: 24, rimK: 0.22 }),             // 10 dark
+  mkMat({ c: [198, 62, 66], ks: 0.92, sh: 62, rimK: 0.40 })             // 11 ruby
+];
+var TI = 0, TID = 1, TIB = 2, SAPPH = 3, DIALM = 4, DIALG = 5,
+    GOLD = 6, LUME = 7, GILT = 8, STEEL = 9, DARK = 10, RUBY = 11;
+
+/* ---------- parts ---------- */
+var PARTS = [
+  { n: 'crystal',  off: [0, 0,  1.80], anchor: [0.58,  0.52,  0.24], label: 'Sapphire crystal' },
+  { n: 'bezel',    off: [0, 0,  1.32], anchor: [0.94,  0.30,  0.17], label: 'Grade-5 bezel' },
+  { n: 'dial',     off: [0, 0,  0.76], anchor: [0.70, -0.46,  0.08], label: 'Guilloché dial' },
+  { n: 'handH',    off: [0, 0,  1.02], pivot: [0, 0] },
+  { n: 'handM',    off: [0, 0,  1.02], pivot: [0, 0] },
+  { n: 'handS',    off: [0, 0,  1.02], pivot: [0, 0] },
+  { n: 'plate',    off: [0, 0,  0.00], internal: true, anchor: [-0.74, -0.36, -0.09], label: 'Calibre M-01' },
+  { n: 'gearA',    off: [0, 0,  0.34], internal: true, pivot: [ 0.30, -0.14] },
+  { n: 'gearB',    off: [0, 0,  0.34], internal: true, pivot: [-0.26,  0.12] },
+  { n: 'gearC',    off: [0, 0,  0.34], internal: true, pivot: [ 0.02,  0.34] },
+  { n: 'balance',  off: [0, 0,  0.34], internal: true, pivot: [-0.30, -0.34], anchor: [-0.30, -0.34, -0.02], label: 'Free-sprung balance' },
+  { n: 'rotor',    off: [0, 0, -1.05], internal: true, pivot: [0, 0], anchor: [-0.46, 0.46, -0.16], label: 'Oscillating weight' },
+  { n: 'case',     off: [0, 0, -0.62], anchor: [1.02, -0.60, -0.06], label: 'Monobloc case' },
+  { n: 'back',     off: [0, 0, -1.62], anchor: [0.60, -0.62, -0.28], label: 'Exhibition back' },
+  { n: 'crown',    off: [0.55, 0, -0.62] }
+];
+var P_CRYSTAL = 0, P_BEZEL = 1, P_DIAL = 2, P_HH = 3, P_HM = 4, P_HS = 5,
+    P_PLATE = 6, P_GA = 7, P_GB = 8, P_GC = 9, P_BAL = 10, P_ROT = 11,
+    P_CASE = 12, P_BACK = 13, P_CROWN = 14;
+
+/* ---------- primitive builders ---------- */
+function quad(G, part, mat, p1, p2, p3, p4) {
+  var i = G.vx.length;
+  var ps = [p1, p2, p3, p4];
+  for (var k = 0; k < 4; k++) {
+    G.vx.push(ps[k][0]); G.vy.push(ps[k][1]); G.vz.push(ps[k][2]); G.vp.push(part);
+  }
+  G.f.push([i, i + 1, i + 2, i + 3, mat, part]);
+}
+
+/* annulus / cylinder / arc. Winding is outward-facing throughout. */
+function tube(G, o) {
+  var r0 = o.r0 || 0, r1 = o.r1, z0 = o.z0, z1 = o.z1;
+  var a0 = o.a0 === undefined ? 0 : o.a0;
+  var a1 = o.a1 === undefined ? TAU : o.a1;
+  var segs = o.segs, part = o.part, mat = o.mat;
+  var matAlt = o.matAlt === undefined ? null : o.matAlt;
+  var cx = o.cx || 0, cy = o.cy || 0;
+  var capT = o.capT !== false, capB = o.capB !== false;
+  var outer = o.outer !== false, inner = o.inner !== false;
+  var step = (a1 - a0) / segs;
+  var full = Math.abs((a1 - a0) - TAU) < 1e-6;
+
+  for (var i = 0; i < segs; i++) {
+    var b0 = a0 + i * step, b1 = b0 + step;
+    var c0 = Math.cos(b0), s0 = Math.sin(b0), c1 = Math.cos(b1), s1 = Math.sin(b1);
+    var m = (matAlt !== null && (i & 1)) ? matAlt : mat;
+    var i0x = cx + r0 * c0, i0y = cy + r0 * s0;
+    var o0x = cx + r1 * c0, o0y = cy + r1 * s0;
+    var o1x = cx + r1 * c1, o1y = cy + r1 * s1;
+    var i1x = cx + r0 * c1, i1y = cy + r0 * s1;
+
+    if (capT) quad(G, part, m, [i0x, i0y, z1], [o0x, o0y, z1], [o1x, o1y, z1], [i1x, i1y, z1]);
+    if (capB) quad(G, part, m, [i0x, i0y, z0], [i1x, i1y, z0], [o1x, o1y, z0], [o0x, o0y, z0]);
+    if (outer) quad(G, part, m, [o0x, o0y, z0], [o1x, o1y, z0], [o1x, o1y, z1], [o0x, o0y, z1]);
+    if (inner && r0 > 1e-4) quad(G, part, m, [i0x, i0y, z0], [i0x, i0y, z1], [i1x, i1y, z1], [i1x, i1y, z0]);
+  }
+
+  if (!full && r0 > 1e-4) {
+    var ca = Math.cos(a0), sa = Math.sin(a0), cb = Math.cos(a1), sb = Math.sin(a1);
+    // start wall (normal = -tangent at a0)
+    quad(G, part, mat,
+      [cx + r0 * ca, cy + r0 * sa, z0], [cx + r1 * ca, cy + r1 * sa, z0],
+      [cx + r1 * ca, cy + r1 * sa, z1], [cx + r0 * ca, cy + r0 * sa, z1]);
+    // end wall (normal = +tangent at a1)
+    quad(G, part, mat,
+      [cx + r0 * cb, cy + r0 * sb, z0], [cx + r0 * cb, cy + r0 * sb, z1],
+      [cx + r1 * cb, cy + r1 * sb, z1], [cx + r1 * cb, cy + r1 * sb, z0]);
+  }
+}
+
+/* box, optionally rotated about the model origin (so it can orbit a pivot) */
+function box(G, part, mat, cx, cy, cz, sx, sy, sz, rot) {
+  rot = rot || 0;
+  var hx = sx / 2, hy = sy / 2, hz = sz / 2;
+  var c = Math.cos(rot), s = Math.sin(rot);
+  function P(dx, dy, dz) {
+    var x = cx + dx, y = cy + dy;
+    return [x * c - y * s, x * s + y * c, cz + dz];
+  }
+  var v000 = P(-hx, -hy, -hz), v100 = P(hx, -hy, -hz), v110 = P(hx, hy, -hz), v010 = P(-hx, hy, -hz);
+  var v001 = P(-hx, -hy, hz),  v101 = P(hx, -hy, hz),  v111 = P(hx, hy, hz),  v011 = P(-hx, hy, hz);
+  quad(G, part, mat, v001, v101, v111, v011); // +z
+  quad(G, part, mat, v000, v010, v110, v100); // -z
+  quad(G, part, mat, v100, v110, v111, v101); // +x
+  quad(G, part, mat, v000, v001, v011, v010); // -x
+  quad(G, part, mat, v010, v011, v111, v110); // +y
+  quad(G, part, mat, v000, v100, v101, v001); // -y
+}
+
+/* ---------- the watch ---------- */
+function buildWatch(Q) {
+  var G = { vx: [], vy: [], vz: [], vp: [], f: [] };
+  var S1 = Math.max(18, Math.round(38 * Q));  // main rings
+  var S2 = Math.max(12, Math.round(22 * Q));  // gears
+  var S3 = Math.max(10, Math.round(16 * Q));  // small
+  var i, a;
+
+  /* --- case: monobloc barrel + lugs --- */
+  tube(G, { r0: 0.90, r1: 1.00, z0: -0.245, z1: 0.12, segs: S1, part: P_CASE, mat: TI, inner: false });
+  var lugAng = [1.13, 2.01, 4.27, 5.15];
+  for (i = 0; i < 4; i++) {
+    a = lugAng[i];
+    box(G, P_CASE, TI, Math.cos(a) * 1.01, Math.sin(a) * 1.01, -0.055, 0.23, 0.24, 0.125, a - Math.PI / 2);
+  }
+  /* crown */
+  box(G, P_CROWN, TI, 1.07, 0, -0.055, 0.13, 0.15, 0.15, 0);
+  box(G, P_CROWN, TIB, 1.14, 0, -0.055, 0.03, 0.11, 0.11, 0);
+
+  /* --- bezel: fluted ring --- */
+  tube(G, { r0: 0.855, r1: 1.005, z0: 0.12, z1: 0.195, segs: S1, part: P_BEZEL, mat: TI, matAlt: TIB });
+
+  /* --- crystal --- */
+  tube(G, { r0: 0, r1: 0.865, z0: 0.195, z1: 0.232, segs: S1, part: P_CRYSTAL, mat: SAPPH });
+
+  /* --- dial --- */
+  tube(G, { r0: 0, r1: 0.862, z0: 0.028, z1: 0.075, segs: S1, part: P_DIAL, mat: DIALM });
+  tube(G, { r0: 0.30, r1: 0.54, z0: 0.075, z1: 0.079, segs: S1, part: P_DIAL, mat: DIALM, matAlt: DIALG, capB: false, inner: false, outer: false });
+  tube(G, { r0: 0.60, r1: 0.80, z0: 0.075, z1: 0.079, segs: S1, part: P_DIAL, mat: DIALG, matAlt: DIALM, capB: false, inner: false, outer: false });
+  /* indices */
+  for (i = 0; i < 12; i++) {
+    a = i * TAU / 12 + Math.PI / 2;
+    var big = (i % 3 === 0);
+    box(G, P_DIAL, LUME, 0, big ? 0.715 : 0.725, 0.088,
+      big ? 0.075 : 0.042, big ? 0.155 : 0.100, 0.024, a - Math.PI / 2);
+  }
+  /* centre cap */
+  tube(G, { r0: 0, r1: 0.052, z0: 0.076, z1: 0.104, segs: S3, part: P_DIAL, mat: GOLD });
+
+  /* --- hands (built pointing +y, pivot at origin) --- */
+  box(G, P_HH, GOLD, 0, 0.245, 0.118, 0.058, 0.49, 0.020, 0);
+  box(G, P_HH, LUME, 0, 0.290, 0.130, 0.030, 0.27, 0.010, 0);
+  box(G, P_HM, GOLD, 0, 0.345, 0.140, 0.044, 0.69, 0.018, 0);
+  box(G, P_HM, LUME, 0, 0.410, 0.151, 0.022, 0.42, 0.009, 0);
+  box(G, P_HS, GOLD, 0, 0.300, 0.158, 0.014, 0.80, 0.011, 0);
+  box(G, P_HS, GOLD, 0, -0.135, 0.158, 0.034, 0.16, 0.011, 0);
+
+  /* --- movement plate --- */
+  tube(G, { r0: 0, r1: 0.800, z0: -0.115, z1: -0.058, segs: S2, part: P_PLATE, mat: GILT });
+  tube(G, { r0: 0.28, r1: 0.62, z0: -0.058, z1: -0.054, segs: S2, part: P_PLATE, mat: GILT, matAlt: DARK, capB: false, inner: false, outer: false });
+  /* bridges */
+  tube(G, { r0: 0.30, r1: 0.66, z0: -0.054, z1: -0.024, a0: 0.35, a1: 2.05, segs: Math.max(6, S3), part: P_PLATE, mat: GILT });
+  tube(G, { r0: 0.24, r1: 0.58, z0: -0.054, z1: -0.024, a0: 3.35, a1: 4.85, segs: Math.max(6, S3), part: P_PLATE, mat: GILT });
+  /* jewels */
+  var jew = [[0.30, -0.14], [-0.26, 0.12], [0.02, 0.34], [-0.30, -0.34], [0.46, 0.30]];
+  for (i = 0; i < jew.length; i++) {
+    tube(G, { r0: 0, r1: 0.035, z0: -0.022, z1: -0.014, segs: 8, part: P_PLATE, mat: RUBY, cx: jew[i][0], cy: jew[i][1] });
+  }
+
+  /* --- gear train --- */
+  function gear(part, cx, cy, R, teeth) {
+    tube(G, { r0: 0.030, r1: R, z0: -0.050, z1: -0.028, segs: S2, part: part, mat: STEEL, cx: cx, cy: cy });
+    tube(G, { r0: 0.052, r1: R * 0.66, z0: -0.028, z1: -0.024, segs: S2, part: part, mat: GOLD, cx: cx, cy: cy, capB: false, inner: false, outer: false });
+    for (var t = 0; t < teeth; t++) {
+      var ta = t * TAU / teeth;
+      box(G, part, STEEL, cx + Math.cos(ta) * (R + 0.022), cy + Math.sin(ta) * (R + 0.022), -0.039,
+        0.044, 0.026, 0.020, ta);
+    }
+  }
+  gear(P_GA,  0.30, -0.14, 0.170, 14);
+  gear(P_GB, -0.26,  0.12, 0.132, 12);
+  gear(P_GC,  0.02,  0.34, 0.104, 10);
+
+  /* --- balance wheel --- */
+  tube(G, { r0: 0.120, r1: 0.155, z0: -0.044, z1: -0.020, segs: S2, part: P_BAL, mat: STEEL, cx: -0.30, cy: -0.34 });
+  for (i = 0; i < 2; i++) {
+    var ba = i * Math.PI / 2;
+    box(G, P_BAL, STEEL, 0, 0, -0.032, 0.30, 0.024, 0.014, ba);
+  }
+  tube(G, { r0: 0, r1: 0.030, z0: -0.032, z1: -0.014, segs: 8, part: P_BAL, mat: GOLD, cx: -0.30, cy: -0.34 });
+
+  /* --- rotor (oscillating weight) --- */
+  tube(G, { r0: 0.26, r1: 0.760, z0: -0.176, z1: -0.148, a0: 0.18, a1: 3.32, segs: Math.max(10, S2), part: P_ROT, mat: TID });
+  tube(G, { r0: 0.63, r1: 0.780, z0: -0.186, z1: -0.140, a0: 0.18, a1: 3.32, segs: Math.max(10, S2), part: P_ROT, mat: GOLD });
+  tube(G, { r0: 0, r1: 0.090, z0: -0.176, z1: -0.140, segs: S3, part: P_ROT, mat: STEEL });
+
+  /* --- case back + exhibition window --- */
+  tube(G, { r0: 0.52, r1: 0.955, z0: -0.285, z1: -0.240, segs: S1, part: P_BACK, mat: TI, inner: false });
+  tube(G, { r0: 0, r1: 0.530, z0: -0.274, z1: -0.256, segs: S2, part: P_BACK, mat: SAPPH });
+  tube(G, { r0: 0.62, r1: 0.90, z0: -0.287, z1: -0.285, segs: S2, part: P_BACK, mat: TID, matAlt: TI, capB: true, capT: false, inner: false, outer: false });
+
+  return flatten(G);
+}
+
+function flatten(G) {
+  var n = G.vx.length, fn = G.f.length;
+  var M = {
+    n: n, fn: fn,
+    bx: new Float32Array(G.vx), by: new Float32Array(G.vy), bz: new Float32Array(G.vz),
+    vp: new Uint8Array(G.vp),
+    fa: new Uint16Array(fn), fb: new Uint16Array(fn), fc: new Uint16Array(fn), fd: new Uint16Array(fn),
+    fm: new Uint8Array(fn), fp: new Uint8Array(fn),
+    X: new Float32Array(n), Y: new Float32Array(n), Z: new Float32Array(n),
+    PX: new Float32Array(n), PY: new Float32Array(n),
+    ord: new Int32Array(fn), depth: new Float32Array(fn), shade: new Int16Array(fn),
+    big: new Uint8Array(fn), bins: new Int32Array(fn), slots: new Int32Array(fn),
+    NB: 1024, counts: new Int32Array(1024),
+    live: 0
+  };
+  for (var q = 0; q < fn; q++) {
+    M.fa[q] = G.f[q][0]; M.fb[q] = G.f[q][1]; M.fc[q] = G.f[q][2]; M.fd[q] = G.f[q][3];
+    M.fm[q] = G.f[q][4]; M.fp[q] = G.f[q][5];
+  }
+  return M;
+}
+/* --- GEOMETRY:END --- */
+
+/* ============================================================
+   RENDERER
+   ============================================================ */
+var CAM = 6.2;
+var LX = -0.42, LY = 0.60, LZ = 0.68;
+(function () { var l = Math.sqrt(LX * LX + LY * LY + LZ * LZ); LX /= l; LY /= l; LZ /= l; })();
+
+var PART_INTERNAL = (function () {
+  var a = new Uint8Array(15);
+  for (var i = 0; i < 15; i++) a[i] = PARTS[i].internal ? 1 : 0;
+  return a;
+})();
+
+/* reused every frame — no per-frame allocation */
+var _PS = {
+  cos: new Float32Array(15), sin: new Float32Array(15),
+  px: new Float32Array(15), py: new Float32Array(15),
+  ox: new Float32Array(15), oy: new Float32Array(15), oz: new Float32Array(15)
+};
+
+function partState(S) {
+  var cos = _PS.cos, sin = _PS.sin, px = _PS.px, py = _PS.py,
+      ox = _PS.ox, oy = _PS.oy, oz = _PS.oz;
+  for (var i = 0; i < 15; i++) {
+    var P = PARTS[i], ang = 0;
+    if (i === P_HH) ang = S.hA; else if (i === P_HM) ang = S.mA; else if (i === P_HS) ang = S.sA;
+    else if (i === P_GA) ang = S.gear * 1.00;
+    else if (i === P_GB) ang = -S.gear * 1.55;
+    else if (i === P_GC) ang = S.gear * 2.30;
+    else if (i === P_BAL) ang = Math.sin(S.bal) * 0.62;
+    else if (i === P_ROT) ang = S.rotor;
+    cos[i] = Math.cos(ang); sin[i] = Math.sin(ang);
+    px[i] = P.pivot ? P.pivot[0] : 0; py[i] = P.pivot ? P.pivot[1] : 0;
+    ox[i] = P.off[0] * S.ex; oy[i] = P.off[1] * S.ex; oz[i] = P.off[2] * S.ex;
+  }
+  return _PS;
+}
+
+function camera(W, H, S) {
+  var base = Math.min(W, H);
+  return {
+    cx: W * 0.5 + (S.panX || 0) * W,
+    cy: H * 0.5 + (S.panY || 0) * H,
+    focal: base * 1.95 * (S.zoom || 1)
+  };
+}
+
+function xformPoint(x, y, z, part, S, PS, cam) {
+  var cs = PS.cos[part], sn = PS.sin[part];
+  if (cs !== 1 || sn !== 0) {
+    var ax = PS.px[part], ay = PS.py[part];
+    var dx = x - ax, dy = y - ay;
+    x = ax + dx * cs - dy * sn;
+    y = ay + dx * sn + dy * cs;
+  }
+  x += PS.ox[part]; y += PS.oy[part]; z += PS.oz[part];
+  var cy0 = Math.cos(S.rotY), sy0 = Math.sin(S.rotY);
+  var cx0 = Math.cos(S.rotX), sx0 = Math.sin(S.rotX);
+  var x1 = x * cy0 + z * sy0, z1 = -x * sy0 + z * cy0;
+  var y2 = y * cx0 - z1 * sx0, z2 = y * sx0 + z1 * cx0;
+  var d = CAM - z2; if (d < 0.05) d = 0.05;
+  var s = cam.focal / d;
+  return { x: cam.cx + x1 * s, y: cam.cy - y2 * s, z: z2 };
+}
+
+function renderScene(ctx, W, H, S, M) {
+  ctx.clearRect(0, 0, W, H);
+  if (S.glow) {
+    var gr = ctx.createRadialGradient(W * 0.5, H * 0.46, 0, W * 0.5, H * 0.46, Math.min(W, H) * 0.62);
+    gr.addColorStop(0, 'rgba(58,58,70,0.42)');
+    gr.addColorStop(0.55, 'rgba(20,20,26,0.20)');
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
+  }
+  if (S.fade <= 0.005) return;
+
+  var PS = partState(S), cam = camera(W, H, S);
+  var cy0 = Math.cos(S.rotY), sy0 = Math.sin(S.rotY);
+  var cx0 = Math.cos(S.rotX), sx0 = Math.sin(S.rotX);
+  var X = M.X, Y = M.Y, Z = M.Z, PX = M.PX, PY = M.PY;
+  var showInternal = S.ex > 0.035;
+
+  /* vertex transform */
+  for (var i = 0, n = M.n; i < n; i++) {
+    var p = M.vp[i];
+    if (!showInternal && PART_INTERNAL[p]) continue;
+    var x = M.bx[i], y = M.by[i], z = M.bz[i];
+    var cs = PS.cos[p], sn = PS.sin[p];
+    if (cs !== 1 || sn !== 0) {
+      var ax = PS.px[p], ay = PS.py[p];
+      var dx = x - ax, dy = y - ay;
+      x = ax + dx * cs - dy * sn;
+      y = ay + dx * sn + dy * cs;
+    }
+    x += PS.ox[p]; y += PS.oy[p]; z += PS.oz[p];
+    var x1 = x * cy0 + z * sy0, z1 = -x * sy0 + z * cy0;
+    var y2 = y * cx0 - z1 * sx0, z2 = y * sx0 + z1 * cx0;
+    X[i] = x1; Y[i] = y2; Z[i] = z2;
+    var d = CAM - z2; if (d < 0.05) d = 0.05;
+    var s = cam.focal / d;
+    PX[i] = cam.cx + x1 * s; PY[i] = cam.cy - y2 * s;
+  }
+
+  /* face pass: cull + shade + depth */
+  var live = 0, ord = M.ord, depth = M.depth, shade = M.shade, big = M.big;
+  var lume = S.lume || 0;
+  var dmin = 1e9, dmax = -1e9;
+  for (var f = 0, fn = M.fn; f < fn; f++) {
+    var pid = M.fp[f];
+    if (!showInternal && PART_INTERNAL[pid]) continue;
+    var a = M.fa[f], b = M.fb[f], c = M.fc[f], d = M.fd[f];
+
+    /* screen-space reject (cheap, kills off-frame geometry when zoomed in) */
+    var qa = PX[a], qb = PX[b], qc = PX[c], qd = PX[d];
+    var mnx = qa < qb ? qa : qb; if (qc < mnx) mnx = qc; if (qd < mnx) mnx = qd;
+    if (mnx > W + 8) continue;
+    var mxx = qa > qb ? qa : qb; if (qc > mxx) mxx = qc; if (qd > mxx) mxx = qd;
+    if (mxx < -8) continue;
+    var ra = PY[a], rb = PY[b], rc = PY[c], rd = PY[d];
+    var mny = ra < rb ? ra : rb; if (rc < mny) mny = rc; if (rd < mny) mny = rd;
+    if (mny > H + 8) continue;
+    var mxy = ra > rb ? ra : rb; if (rc > mxy) mxy = rc; if (rd > mxy) mxy = rd;
+    if (mxy < -8) continue;
+
+    var ux = X[b] - X[a], uy = Y[b] - Y[a], uz = Z[b] - Z[a];
+    var vx = X[c] - X[a], vy = Y[c] - Y[a], vz = Z[c] - Z[a];
+    var nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    var nl = Math.sqrt(nx * nx + ny * ny + nz * nz);
+    if (nl < 1e-9) continue;
+    nx /= nl; ny /= nl; nz /= nl;
+
+    var ccx = (X[a] + X[b] + X[c] + X[d]) * 0.25;
+    var ccy = (Y[a] + Y[b] + Y[c] + Y[d]) * 0.25;
+    var ccz = (Z[a] + Z[b] + Z[c] + Z[d]) * 0.25;
+    var mat = MATS[M.fm[f]];
+
+    /* view vector (surface -> camera) */
+    var wx = -ccx, wy = -ccy, wz = CAM - ccz;
+    var wl = Math.sqrt(wx * wx + wy * wy + wz * wz);
+    wx /= wl; wy /= wl; wz /= wl;
+
+    var facing = nx * wx + ny * wy + nz * wz;
+    if (facing <= 0) {
+      if (!mat.dbl) continue;
+      nx = -nx; ny = -ny; nz = -nz; facing = -facing;
+    }
+
+    var t;
+    if (mat.emit) {
+      t = mat.emitBase + (1 - mat.emitBase) * lume;
+    } else {
+      var diff = nx * LX + ny * LY + nz * LZ; if (diff < 0) diff = 0;
+      var hx = LX + wx, hy = LY + wy, hz = LZ + wz;
+      var hl = Math.sqrt(hx * hx + hy * hy + hz * hz);
+      var spec = (nx * hx + ny * hy + nz * hz) / hl; if (spec < 0) spec = 0;
+      spec = Math.pow(spec, mat.sh);
+      var rim = 1 - facing; rim = rim * rim * rim;
+      t = mat.amb + mat.kd * diff + mat.ks * spec + mat.rimK * rim;
+    }
+    if (t < 0) t = 0; else if (t > 1) t = 1;
+
+    ord[live] = f;
+    depth[live] = ccz;
+    if (ccz < dmin) dmin = ccz;
+    if (ccz > dmax) dmax = ccz;
+    big[live] = ((mxx - mnx) > 7 || (mxy - mny) > 7) ? 1 : 0;
+    shade[live] = (t * (RAMP - 1) + 0.5) | 0;
+    live++;
+  }
+
+  /* painter's order, far (small z) first — counting sort, O(n), stable */
+  var slots = M.slots, bins = M.bins, counts = M.counts, NB = M.NB;
+  var span = dmax - dmin;
+  var inv = span > 1e-6 ? (NB - 1) / span : 0;
+  counts.fill(0);
+  for (var k = 0; k < live; k++) {
+    var bi = ((depth[k] - dmin) * inv) | 0;
+    bins[k] = bi; counts[bi]++;
+  }
+  var run = 0;
+  for (var q = 0; q < NB; q++) { var cnt = counts[q]; counts[q] = run; run += cnt; }
+  for (var k2 = 0; k2 < live; k2++) slots[counts[bins[k2]]++] = k2;
+
+  /* draw */
+  var prevAlpha = 1;
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = 1;
+  var glowOn = false;
+  for (var j = 0; j < live; j++) {
+    var sl = slots[j];
+    var fi = ord[sl];
+    var m2 = MATS[M.fm[fi]];
+    var col = m2.ramp[shade[sl]];
+    var al = m2.alpha * S.fade;
+    if (al !== prevAlpha) { ctx.globalAlpha = al; prevAlpha = al; }
+    if (m2.emit && lume > 0.3) {
+      if (!glowOn) { ctx.shadowColor = 'rgba(228,196,120,0.85)'; ctx.shadowBlur = 16 * lume; glowOn = true; }
+    } else if (glowOn) { ctx.shadowBlur = 0; glowOn = false; }
+
+    var A = M.fa[fi], B = M.fb[fi], C = M.fc[fi], D = M.fd[fi];
+    ctx.beginPath();
+    ctx.moveTo(PX[A], PY[A]);
+    ctx.lineTo(PX[B], PY[B]);
+    ctx.lineTo(PX[C], PY[C]);
+    ctx.lineTo(PX[D], PY[D]);
+    ctx.closePath();
+    ctx.fillStyle = col; ctx.fill();
+    if (big[sl]) { ctx.strokeStyle = col; ctx.stroke(); }
+  }
+  if (glowOn) ctx.shadowBlur = 0;
+  ctx.globalAlpha = 1;
+  M.live = live;
+}
+
+/* ============================================================
+   STATE / TRACKS
+   ============================================================ */
+function track(kf, p) {
+  if (p <= kf[0][0]) return kf[0][1];
+  for (var i = 1; i < kf.length; i++) {
+    if (p <= kf[i][0]) {
+      var a = kf[i - 1], b = kf[i];
+      var t = (p - a[0]) / (b[0] - a[0]);
+      var e = t * t * (3 - 2 * t);
+      return a[1] + (b[1] - a[1]) * e;
+    }
+  }
+  return kf[kf.length - 1][1];
+}
+
+var TRK = {
+  spin: [[0, 1.24], [0.10, 0.30], [0.275, 0.30 + TAU], [0.44, 0.30 + TAU + 0.62],
+         [0.60, 0.30 + TAU + 0.90], [0.78, 0.30 + TAU * 2], [1, 0.30 + TAU * 2 + 0.24]],
+  tilt: [[0, -0.64], [0.10, -0.13], [0.28, -0.11], [0.40, -0.46], [0.58, -0.34],
+         [0.73, -0.12], [0.88, -0.06], [1, -0.20]],
+  ex:   [[0, 0], [0.288, 0], [0.430, 1], [0.478, 1], [0.532, 0.40], [0.606, 0.40], [0.735, 0], [1, 0]],
+  zoom: [[0, 0.70], [0.09, 1.00], [0.29, 1.00], [0.420, 0.72], [0.478, 0.72], [0.545, 1.35], [0.606, 1.35], [0.700, 1.00], [1, 1.00]],
+  panX: [[0, 0], [0.47, 0], [0.545, -0.02], [0.606, -0.02], [0.70, 0], [1, 0]],
+  panY: [[0, 0], [0.47, 0], [0.545, 0.04], [0.606, 0.04], [0.70, 0], [1, 0]],
+  lume: [[0, 0.06], [0.74, 0.06], [0.83, 1], [0.94, 1], [1, 0.70]],
+  fade: [[0, 0], [0.038, 1], [1, 1]],
+  sweep:[[0, 0], [0.76, 0], [0.885, 1], [1, 1.08]]
+};
+
+var BASE_H = -(10.15 / 12) * TAU;
+var BASE_M = -(9 / 60) * TAU;
+
+function filmState(p, time, reduced) {
+  var sw = track(TRK.sweep, p);
+  return {
+    rotY: track(TRK.spin, p),
+    rotX: track(TRK.tilt, p),
+    ex: track(TRK.ex, p),
+    zoom: track(TRK.zoom, p),
+    panX: track(TRK.panX, p),
+    panY: track(TRK.panY, p),
+    lume: track(TRK.lume, p),
+    fade: track(TRK.fade, p),
+    hA: BASE_H - sw * TAU * 0.34,
+    mA: BASE_M - sw * TAU * 4.1,
+    sA: -(reduced ? p * 6 : time * 0.62 + p * 4),
+    gear: (reduced ? 0 : time * 1.05) + p * 3.2,
+    bal: reduced ? 0 : time * 7.5,
+    rotor: (reduced ? 0 : Math.sin(time * 0.55) * 0.9) + p * 1.6,
+    glow: true
+  };
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+function boot() {
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stage = document.getElementById('stage');
+  var ctx = stage.getContext('2d', { alpha: true });
+  var film = document.getElementById('film');
+  var caps = Array.prototype.slice.call(document.querySelectorAll('.cap'));
+  var labelHost = document.getElementById('labels');
+  var railFill = document.getElementById('railFill');
+  var railNum = document.getElementById('railNum');
+  var cue = document.getElementById('cue');
+  var nav = document.getElementById('nav');
+
+  /* quality */
+  var small = Math.min(window.innerWidth, window.innerHeight) < 720;
+  var cores = navigator.hardwareConcurrency || 4;
+  var Q = small ? 0.60 : (cores <= 4 ? 0.80 : 1.0);
+  var MODEL = buildWatch(Q);
+
+  /* labels */
+  var labels = [];
+  for (var i = 0; i < PARTS.length; i++) {
+    if (!PARTS[i].label) continue;
+    var el = document.createElement('div');
+    el.className = 'plabel';
+    el.innerHTML = '<i></i>' + PARTS[i].label;
+    labelHost.appendChild(el);
+    labels.push({ el: el, part: i });
+  }
+
+  /* sizing */
+  var W = 0, H = 0, DPR = 1;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2);
+    var r = stage.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+    stage.width = Math.round(W * DPR);
+    stage.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  var rt;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt); rt = setTimeout(function () { resize(); dirty = true; }, 140);
+  }, { passive: true });
+
+  /* scroll progress */
+  var target = 0, cur = 0, dirty = true, inView = true;
+  function measure() {
+    var rect = film.getBoundingClientRect();
+    var total = film.offsetHeight - window.innerHeight;
+    var p = total > 0 ? (-rect.top) / total : 0;
+    target = p < 0 ? 0 : (p > 1 ? 1 : p);
+  }
+  window.addEventListener('scroll', function () { measure(); dirty = true; }, { passive: true });
+  measure(); cur = target;
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      inView = es[0].isIntersecting;
+    }, { threshold: 0 }).observe(film);
+  }
+
+  /* captions */
+  function updateCaps(p) {
+    for (var i = 0; i < caps.length; i++) {
+      var el = caps[i];
+      var a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
+      var o = 0, y = 24;
+      if (p >= a && p <= b) {
+        var inT = Math.min(1, (p - a) / 0.038);
+        var outT = Math.min(1, (b - p) / 0.038);
+        o = Math.min(inT, outT);
+        y = 24 * (1 - inT) - 20 * (1 - outT);
+      }
+      var centred = el.classList.contains('cap--center');
+      el.style.opacity = o.toFixed(3);
+      el.style.transform = centred
+        ? 'translateY(calc(-50% + ' + y.toFixed(1) + 'px))'
+        : 'translateY(' + y.toFixed(1) + 'px)';
+    }
+  }
+
+  /* exploded-part labels */
+  function updateLabels(S) {
+    var vis = Math.max(0, Math.min(1, (S.ex - 0.30) / 0.34));
+    var PS = partState(S), cam = camera(W, H, S);
+    for (var i = 0; i < labels.length; i++) {
+      var L = labels[i], A = PARTS[L.part].anchor;
+      if (vis <= 0.001) { L.el.style.opacity = 0; continue; }
+      var q = xformPoint(A[0], A[1], A[2], L.part, S, PS, cam);
+      var onScreen = q.x > 10 && q.x < W - 10 && q.y > 10 && q.y < H - 10;
+      L.el.style.opacity = onScreen ? (vis * 0.92).toFixed(3) : 0;
+      L.el.style.transform = 'translate(-50%,-50%) translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px)';
+    }
+  }
+
+  /* main loop */
+  var t0 = performance.now();
+  function frame(now) {
+    var time = (now - t0) / 1000;
+    if (reduced) cur = target;
+    else {
+      var d = target - cur;
+      if (Math.abs(d) > 0.00012) { cur += d * 0.17; dirty = true; }
+      else cur = target;
+    }
+    if (inView && (dirty || !reduced)) {
+      var S = filmState(cur, time, reduced);
+      renderScene(ctx, W, H, S, MODEL);
+      updateCaps(cur);
+      updateLabels(S);
+      railFill.style.height = (cur * 100).toFixed(2) + '%';
+      railNum.textContent = String(Math.min(99, Math.round(cur * 100))).padStart(2, '0');
+      cue.style.opacity = cur > 0.03 ? 0 : 1;
+      dirty = false;
+    }
+    /* nav */
+    var past = window.scrollY > (film.offsetTop + film.offsetHeight - window.innerHeight * 1.1);
+    nav.classList.toggle('is-on', past);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- static poses for craft + gallery ---------- */
+  var POSES = {
+    hero:     { rotY: 0.30, rotX: -0.10, ex: 0,    zoom: 1.02, lume: 0.10 },
+    profile:  { rotY: 1.40, rotX: -0.05, ex: 0,    zoom: 1.02, lume: 0.06 },
+    back:     { rotY: Math.PI + 0.22, rotX: 0.14, ex: 0, zoom: 1.02, lume: 0 },
+    exploded: { rotY: 0.58, rotX: -0.62, ex: 1,    zoom: 0.66, lume: 0.10 },
+    lume:     { rotY: 0.20, rotX: -0.07, ex: 0,    zoom: 1.06, lume: 1 },
+    case:     { rotY: 0.92, rotX: -0.34, ex: 0,    zoom: 1.12, lume: 0.05 },
+    movement: { rotY: Math.PI + 0.08, rotX: 0.20, ex: 0.30, zoom: 1.34, lume: 0 },
+    dial:     { rotY: 0.06, rotX: -0.05, ex: 0,    zoom: 1.70, panY: 0.04, lume: 0.35 }
+  };
+  function poseState(name) {
+    var b = POSES[name] || POSES.hero;
+    return {
+      rotY: b.rotY, rotX: b.rotX, ex: b.ex, zoom: b.zoom,
+      panX: b.panX || 0, panY: b.panY || 0, lume: b.lume || 0, fade: 1,
+      hA: BASE_H, mA: BASE_M, sA: -TAU * 0.62, gear: 0.7, bal: 0.4, rotor: 0.9, glow: true
+    };
+  }
+  var minis = Array.prototype.slice.call(document.querySelectorAll('.mini'));
+  function drawMini(cv) {
+    var r = cv.getBoundingClientRect();
+    if (r.width < 4) return;
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+    var c2 = cv.getContext('2d');
+    c2.setTransform(d, 0, 0, d, 0, 0);
+    renderScene(c2, r.width, r.height, poseState(cv.dataset.pose), MODEL);
+  }
+
+  /* ---------- reveals, minis, counters ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.rv'));
+  function countUp(el) {
+    var end = parseInt(el.dataset.count, 10);
+    var sfx = el.querySelector('i');
+    var sfxHTML = sfx ? sfx.outerHTML : '';
+    var dur = 1250, st = performance.now();
+    function step(now) {
+      var t = Math.min(1, (now - st) / dur);
+      var e = 1 - Math.pow(1 - t, 4);
+      el.innerHTML = Math.round(end * e).toLocaleString('en-GB') + sfxHTML;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        var c = en.target.querySelector('[data-count]');
+        if (c && !c.dataset.done) { c.dataset.done = '1'; countUp(c); }
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+    revealEls.forEach(function (e) { io.observe(e); });
+
+    var mio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        drawMini(en.target);
+        mio.unobserve(en.target);
+      });
+    }, { threshold: 0.05, rootMargin: '160px' });
+    minis.forEach(function (c) { mio.observe(c); });
+  } else {
+    revealEls.forEach(function (e) { e.classList.add('is-in'); });
+    minis.forEach(drawMini);
+  }
+
+  window.addEventListener('resize', function () {
+    clearTimeout(window.__mrt);
+    window.__mrt = setTimeout(function () { minis.forEach(drawMini); }, 260);
+  }, { passive: true });
+
+  /* smooth anchors */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+}
+
+</script>
+</body>
+</html>
